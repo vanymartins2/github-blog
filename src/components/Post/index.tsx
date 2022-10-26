@@ -12,8 +12,11 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
+import { useParams } from 'react-router-dom'
 
 export function Post() {
+  const { issueNumber } = useParams()
+
   return (
     <PostContainer>
       <PostHeader>
@@ -56,6 +59,8 @@ export function Post() {
         JavaScript are not directly associated with any particular value type,
         and any variable can be assigned (and re-assigned) values of all types:
       </Content>
+
+      <p>{issueNumber}</p>
     </PostContainer>
   )
 }
