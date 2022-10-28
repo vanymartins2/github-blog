@@ -25,6 +25,8 @@ interface Issue {
 interface BlogContextType {
   user: User
   issues: Issue[]
+  filteredIssues: Issue[]
+  filterIssues: (query: string) => void
 }
 
 interface BlogContextProviderProps {
@@ -56,6 +58,8 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
       createdAt: new Date()
     }
   ])
+
+  const [filteredIssues, setFilteredIssues] = useState<Issue[]>([])
 
   const fetchUser = async () => {
     const response = await api.get('/users/vanymartins2')
@@ -91,7 +95,7 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
         return {
           id: issue.id,
           issueNumber: issue.number,
-          issueUrl: issue.url,
+          issueUrl: issue.html_url,
           title: issue.title,
           user: issue.user.login,
           comments: issue.comments,
@@ -106,8 +110,18 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
     fetchIssues()
   }, [])
 
+  const filterIssues = (query: string) => {
+    const newIssueList = issues.filter(issue => {
+      return issue.title.toLowerCase().includes(query)
+    })
+
+    setFilteredIssues(newIssueList)
+  }
+
   return (
-    <BlogContext.Provider value={{ user, issues }}>
+    <BlogContext.Provider
+      value={{ user, issues, filteredIssues, filterIssues }}
+    >
       {children}
     </BlogContext.Provider>
   )

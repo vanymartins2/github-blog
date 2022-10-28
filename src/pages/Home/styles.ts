@@ -20,6 +20,7 @@ export const CardContainer = styled(RouterLink)`
   max-width: 26rem;
   max-height: 16.25rem;
   padding: 2rem;
+  overflow: hidden;
 
   background: ${props => props.theme['base-post']};
   border-radius: 10px;
@@ -33,7 +34,7 @@ export const CardContainer = styled(RouterLink)`
     text-overflow: ellipsis;
     display: -webkit-box;
     max-height: inherit;
-    -webkit-line-clamp: 4; /* number of lines to show */
+    -webkit-line-clamp: 4; // number of lines to show
     -webkit-box-orient: vertical;
   }
 

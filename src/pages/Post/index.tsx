@@ -1,5 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ReactNode, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { BlogContext } from '../../contexts/BlogContext'
+
 import {
+  BackButton,
   Content,
   Link,
   NavButtons,
@@ -7,60 +11,63 @@ import {
   PostHeader,
   PostInfo
 } from './styles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
-import { useParams } from 'react-router-dom'
+
+import ReactMarkdown from 'react-markdown'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export function Post() {
   const { issueNumber } = useParams()
+  const { issues } = useContext(BlogContext)
+
+  const currentPost = issues?.find(
+    issue => String(issue?.issueNumber) === issueNumber
+  )
 
   return (
     <PostContainer>
       <PostHeader>
         <NavButtons>
-          <Link to={'/'}>
+          <BackButton to={'/'}>
             <FontAwesomeIcon icon={faChevronLeft} />
             Voltar
-          </Link>
-          <Link to={'/'}>
+          </BackButton>
+          <Link href={`${currentPost?.issueUrl}`} target="_blank">
             Ver no github
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </Link>
         </NavButtons>
 
-        <h1>JavaScript data types and data structures</h1>
+        <h1>{currentPost?.title}</h1>
 
         <PostInfo>
           <li>
             <FontAwesomeIcon icon={faGithub} />
-            duskarknights
+            {currentPost?.user}
           </li>
           <li>
             <FontAwesomeIcon icon={faCalendarDay} />
-            Há 1 dia
+            {formatDistanceToNow(new Date(String(currentPost?.createdAt)), {
+              addSuffix: true,
+              locale: ptBR
+            })}
           </li>
           <li>
             <FontAwesomeIcon icon={faComment} />
-            Há 1 dia
+            {currentPost?.comments}
           </li>
         </PostInfo>
       </PostHeader>
 
       <Content>
-        Programming languages all have built-in data structures, but these often
-        differ from one language to another. This article attempts to list the
-        built-in data structures available in JavaScript and what properties
-        they have. These can be used to build other data structures. Wherever
-        possible, comparisons with other languages are drawn. Dynamic typing
-        JavaScript is a loosely typed and dynamic language. Variables in
-        JavaScript are not directly associated with any particular value type,
-        and any variable can be assigned (and re-assigned) values of all types:
+        <ReactMarkdown>{`${currentPost?.body}`}</ReactMarkdown>
       </Content>
-
-      <p>{issueNumber}</p>
     </PostContainer>
   )
 }

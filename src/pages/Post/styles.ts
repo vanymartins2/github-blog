@@ -35,7 +35,7 @@ export const NavButtons = styled.div`
   align-items: center;
 `
 
-export const Link = styled(RouterLink)`
+export const Link = styled.a`
   font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
@@ -51,6 +51,23 @@ export const Link = styled(RouterLink)`
     text-decoration: underline;
   }
 `
+export const BackButton = styled(RouterLink)`
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: ${props => props.theme.blue};
+
+  svg {
+    margin: 0 0.5rem;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 export const PostInfo = styled.ul`
   display: flex;
   gap: 2rem;
